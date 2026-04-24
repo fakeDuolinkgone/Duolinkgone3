@@ -393,7 +393,12 @@ button:hover {
 @media (max-width: 768px) {
 
   /* 🚫 chặn tràn ngang toàn trang */
-  html, body {
+  html {
+    overflow-x: hidden;
+  }
+
+  body {
+    display: block !important; /* 💥 BỎ FLEX */;
     overflow-x: hidden;
   }
 
