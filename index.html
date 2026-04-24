@@ -392,51 +392,89 @@ button:hover {
 
 @media (max-width: 768px) {
 
-  /* 🔥 CHẶN TRÀN NGANG TOÀN TRANG */
+  /* 🚫 chặn tràn ngang toàn trang */
   html, body {
     overflow-x: hidden;
   }
 
-  /* 🔥 LV2 - ép về 1 cột, không cho phần tử tự phình */
-  #choices.choice-mode {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  /* 🔥 reset những thứ có thể gây tràn từ desktop */
-  #choices.choice-mode > * {
-    min-width: 0 !important;   /* cực quan trọng */
-    
-  }
-
-  .choice {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    min-height: 70px;
-    font-size: 16px;
-    padding: 15px;
-    word-break: break-word;
-  }
-
-  /* input cho gọn */
-
-  /* giữ fix layout m đã làm */
+  /* 📦 reset layout chính cho mobile */
   .box,
   #menuBox {
     position: relative;
     top: unset;
     left: unset;
     transform: none;
+
+    width: 95%;
     margin: 20px auto;
+
+    padding: 20px 10px !important; /* 🔥 giảm padding desktop */
   }
 
-  .box { width: 95%; }
+  #menuBox {
+    margin-top: 40px;
+  }
 
-  #menuBox { margin-top: 40px; }
+  /* 🧠 câu hỏi co lại cho vừa màn */
+  #question {
+    font-size: clamp(22px, 5vw, 60px);
+    line-height: 1.3;
+    margin-top: 0;
+  }
 
+  #question.question-choice {
+    font-size: 24px;
+  }
+
+  #question.question-match {
+    font-size: 20px;
+  }
+
+  /* ✏️ input tránh zoom iOS */
+  input {
+    width: 95%;
+    font-size: 16px;
+  }
+
+  /* 🎯 LV2 - trắc nghiệm (grid) */
+  #choices.choice-mode {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    width: 100%;
+  }
+
+  #choices.choice-mode > * {
+    min-width: 0 !important; /* 🔥 phá giới hạn gây tràn */
+  }
+
+  /* 🎯 LV3 - nối từ */
+  #choices.match-mode {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  #choices.match-mode > div {
+    width: 100%;
+  }
+
+  /* 🧩 choice item */
+  .choice {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    min-height: 70px;
+    padding: 12px;
+    font-size: 16px;
+
+    /* 🔥 chống text phá layout */
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* 📊 result */
   .result-wrapper {
     flex-direction: column;
     gap: 20px;
@@ -445,38 +483,17 @@ button:hover {
 
   .result-main,
   .result-detail {
-    min-width: 0 !important;
     width: 100%;
+    min-width: 0 !important;
     margin-left: 0 !important;
   }
 
+  /* 🎓 chọn lớp */
   .grade-buttons {
     flex-direction: column;
   }
 
-  #question {
-    font-size: clamp(22px, 5vw, 60px);
-    line-height: 1.3;
-    margin-top: 0;
-  }
-
-  #question.question-choice {
-    font-size: 26px;
-    margin-top: 0;
-  }
-
-  #question.question-match {
-    font-size: 22px;
-    margin-top: 0;
-  }
-
-  input {
-    width: 95%;
-    font-size: 16px;
-  }
-
 }
-
 
 
 
