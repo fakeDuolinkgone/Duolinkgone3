@@ -392,39 +392,45 @@ button:hover {
 
 @media (max-width: 768px) {
 
-  body {
-    display: block;
-  }
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* 🔥 căn giữa dọc */
+  align-items: center;       /* 🔥 căn giữa ngang */
+  min-height: 100dvh;
+  padding: 20px 0;
+}
+
 
   html, body {
     overflow-x: hidden;
   }
 
   /* 📦 layout mobile */
-  .box,
-  #menuBox {
-    position: relative;
-    top: unset;
-    left: unset;
-    transform: none;
+#menuBox {
+  position: relative;
+  top: unset;
+  left: unset;
+  transform: none;
 
-    margin: 20px auto;
-    padding: 20px 10px !important;
-  }
-
-  /* 🔥 QUAN TRỌNG: giữ box nhỏ lại */
-  .box {
-  width: 90% !important;
-  max-width: 360px;
-  padding: 20px 12px !important; /* 🔥 giảm padding */
-  box-sizing: border-box;        /* 🔥 không cho padding làm phình */
+  margin: 20px auto;
+  padding: 20px 10px !important;
 }
 
-  #menuBox {
-    width: 90%;
-    max-width: 400px;
-    margin-top: 40px;
-  }
+  /* 🔥 QUAN TRỌNG: giữ box nhỏ lại */
+.box {
+  position: relative; /* 🔥 bỏ absolute */
+  top: unset;
+  left: unset;
+  transform: none;
+
+  width: 90% !important;
+  max-width: 360px;
+  padding: 20px 12px !important;
+
+  margin: 20px auto; /* fallback */
+}
+
 
   #gameContent {
     max-width: 100%;
@@ -437,8 +443,14 @@ button:hover {
     margin-top: 0;
   }
 
-  #question.question-choice { font-size: 24px; }
-  #question.question-match { font-size: 20px; }
+  #question.question-choice { 
+    font-size: 24px; 
+    margin-top: 0 !important;
+}
+  #question.question-match { 
+    font-size: 20px; 
+    margin-top: 0 !important;
+}
 
   /* ✏️ input */
   input {
