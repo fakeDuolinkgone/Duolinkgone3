@@ -392,70 +392,90 @@ button:hover {
 
 @media (max-width: 768px) {
 
-#choices.match-mode {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-#choices.match-mode > div {
-  width: 45%;
-}
-
-  input {
-    width: 90%;
-    font-size: 16px; /* tránh zoom iOS */
+  /* 🔥 CHẶN TRÀN NGANG TOÀN TRANG */
+  html, body {
+    overflow-x: hidden;
   }
 
+  /* 🔥 LV2 - ép về 1 cột, không cho phần tử tự phình */
+  #choices.choice-mode {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* 🔥 reset những thứ có thể gây tràn từ desktop */
+  #choices.choice-mode > * {
+    min-width: 0 !important;   /* cực quan trọng */
+    
+  }
+
+  .choice {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: 70px;
+    font-size: 16px;
+    padding: 15px;
+    word-break: break-word;
+  }
+
+  /* input cho gọn */
+
+  /* giữ fix layout m đã làm */
   .box,
   #menuBox {
-    position: relative; /* ❗ bỏ absolute */
+    position: relative;
     top: unset;
     left: unset;
     transform: none;
-
     margin: 20px auto;
   }
 
-  .box {
-    width: 95%;
-  }
+  .box { width: 95%; }
 
-  #menuBox {
-    margin-top: 40px;
-  }
-
+  #menuBox { margin-top: 40px; }
 
   .result-wrapper {
-    flex-direction: column; /* 🔥 xếp dọc */
+    flex-direction: column;
     gap: 20px;
     padding: 10px;
   }
 
   .result-main,
   .result-detail {
-    min-width: 0 !important;   /* 🔥 phá min-width desktop */
+    min-width: 0 !important;
     width: 100%;
-    margin-left: 0 !important; /* 🔥 bỏ lệch */
-  }
-
-
-  #choices.choice-mode {
-    grid-template-columns: 1fr; /* 🔥 1 cột cho dễ bấm */
-  }
-
-  .choice {
-    font-size: 18px;
-    min-height: 70px;
+    margin-left: 0 !important;
   }
 
   .grade-buttons {
     flex-direction: column;
   }
 
+  #question {
+    font-size: clamp(22px, 5vw, 60px);
+    line-height: 1.3;
+    margin-top: 0;
+  }
+
+  #question.question-choice {
+    font-size: 26px;
+    margin-top: 0;
+  }
+
+  #question.question-match {
+    font-size: 22px;
+    margin-top: 0;
+  }
+
+  input {
+    width: 95%;
+    font-size: 16px;
+  }
 
 }
-
 
 
 
