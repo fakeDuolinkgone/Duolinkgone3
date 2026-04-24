@@ -32,6 +32,9 @@ body {
   
   overscroll-behavior: none;
   touch-action: manipulation;
+
+  display: flex;
+  justify-content: center;
 }
 
 
@@ -387,11 +390,55 @@ button:hover {
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+
+#choices.match-mode {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+#choices.match-mode > div {
+  width: 45%;
+}
+
+  input {
+    width: 90%;
+    font-size: 16px; /* tránh zoom iOS */
+  }
+
+  .box,
+  #menuBox {
+    position: relative; /* ❗ bỏ absolute */
+    top: unset;
+    left: unset;
+    transform: none;
+
+    margin: 20px auto;
+  }
 
   .box {
-    padding: 30px 20px;
+    width: 95%;
   }
+
+  #menuBox {
+    margin-top: 40px;
+  }
+
+
+  .result-wrapper {
+    flex-direction: column; /* 🔥 xếp dọc */
+    gap: 20px;
+    padding: 10px;
+  }
+
+  .result-main,
+  .result-detail {
+    min-width: 0 !important;   /* 🔥 phá min-width desktop */
+    width: 100%;
+    margin-left: 0 !important; /* 🔥 bỏ lệch */
+  }
+
 
   #choices.choice-mode {
     grid-template-columns: 1fr; /* 🔥 1 cột cho dễ bấm */
@@ -399,12 +446,7 @@ button:hover {
 
   .choice {
     font-size: 18px;
-    min-height: 80px;
-  }
-
-  #menuBox {
-    height: auto;
-    padding: 40px 20px;
+    min-height: 70px;
   }
 
   .grade-buttons {
@@ -412,9 +454,6 @@ button:hover {
   }
 
 
-  .result-wrapper {
-    flex-direction: column; /* 🔥 xếp dọc */
-  }
 }
 
 
