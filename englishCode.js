@@ -1,3 +1,7 @@
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+
 
 console.log(vocabData);
 let matchPairs = [];
@@ -631,6 +635,7 @@ vnEl.style.pointerEvents = "none";
 
 //nhập đáp án - s
 function submitAnswer() {
+    
   let ans = input.value.trim().toLowerCase();
   if (!ans) return;
 
@@ -835,6 +840,8 @@ function updateStreakUI() {
 
 //hiệu ứng - s
 function createStar() {
+  if (document.querySelectorAll(".star").length > 5) return;
+
   let star = document.createElement("div");
   star.className = "star";
   star.innerText = "⭐";
@@ -896,10 +903,9 @@ document.addEventListener("DOMContentLoaded", () => {
 let soundEnabled = true; // có thể tắt bật sau
 
 function playSound(sound) {
-  if (!soundEnabled) return;
-
-  sound.currentTime = 0; // reset để spam không bị delay
-  sound.play().catch(() => {}); // tránh lỗi trình duyệt
+  if (!sound.src) return;
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
 }
 
 function playCorrect() {
