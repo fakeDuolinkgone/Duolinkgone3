@@ -174,6 +174,13 @@ body {
   margin-top: -10px;
   font-size: 60px;
   margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#question:hover {
+  transform: scale(1.05);
+  color: #b30000;
 }
 
 
@@ -774,6 +781,615 @@ body {
 #streakBar {
   background: linear-gradient(90deg, 
     red, orange, yellow, green, cyan, blue, violet
+  );
+  background-size: 300% 100%;
+  animation: rainbowMove 2s linear infinite;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s;
+  box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+@keyframes rainbowMove {
+  0% { background-position: 0% 0; }
+  100% { background-position: 100% 0; }
+}
+
+
+
+
+
+
+
+
+.settings-popup {
+  z-index: 10000;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+
+  text-align: center;
+  z-index: 1000;
+
+  opacity: 0;
+  transition: 0.3s;
+}
+
+
+
+
+
+.settings-popup.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+
+
+
+.settings-popup button {
+  display: block;
+  width: 180px;
+  margin: 10px auto;
+}
+
+
+
+
+.settings-popup .exit {
+  background: linear-gradient(135deg, #ff1744, #d50000);
+}
+
+
+
+
+
+
+
+.grade-buttons {
+  display: flex;              /* 🔥 QUAN TRỌNG NHẤT */
+  justify-content: center;
+  gap: 20px;
+
+  max-width: 500px;           /* tăng cho rộng hơn */
+  margin: 20px auto;
+}
+
+.grade-buttons button {
+  flex: 1;                    /* chia đều chiều ngang */
+  padding: 20px;
+  font-size: 20px;
+}
+
+
+
+
+
+
+
+
+.result-container {
+  position: relative;
+  width: 300px;
+  overflow: hidden;
+}
+
+
+.wrong-table {
+  margin: 12px;
+}
+
+
+.next-btn {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: #333;
+  color: white;
+  width: 30px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+
+
+
+
+.wrong-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+
+
+
+
+
+
+/* mỗi dòng */
+.wrong-row {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  border-left: 4px solid #ff1744;
+  margin: 6px 0;
+  cursor: pointer;
+}
+
+
+/* từ vựng */
+.wrong-word {
+  font-weight: bold;
+  font-size: 25px; /* 🔥 to hơn nữa */
+  position: relative;
+  overflow: visible; /* 🔥 đảm bảo wave không bị cắt */
+}
+
+.wrong-user,
+.wrong-correct {
+  text-align: left;
+  font-size: 20px;
+}
+
+.correct-row:hover,
+.wrong-row:hover {
+  transform: scale(1.03);
+  transition: 0.2s;
+}
+
+
+
+.correct-row {
+  border-left: 4px solid #00e676;
+  padding: 10px;
+  margin: 6px 0;
+  cursor: pointer;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+
+
+
+
+
+.popup-result {
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+  animation: scaleUp 0.3s ease;
+}
+
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+/* 🔥 wrapper chứa cả 2 bảng */
+.result-wrapper {
+  display: flex;
+  align-items: stretch; /* 🔥 2 bảng cao bằng nhau */
+
+  gap: 40px;
+
+  width: 100%;
+  max-width: 1300px;
+
+  margin: auto;
+  justify-content: center; /* đã có rồi nhưng giữ chắc */
+}
+
+
+
+
+/* 👉 bảng kết quả */
+.result-main {
+  flex: 1;
+  min-width: 400px;
+
+  background: white;
+  border-radius: 10px;
+  padding: 35px;
+  margin-left: -40px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+
+
+
+
+/* 👉 bảng sai */
+.result-detail {
+  flex: 1;
+  min-width: 500px;
+  max-height: 600px;
+
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+
+
+  overflow-y: auto;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+
+  .result-main h2 {
+  font-size: 50px;
+}
+
+  .result-main p {
+  font-size: 30px;
+  text-align: left;
+  padding: 10px;
+  margin: 10px;
+}
+
+
+.result-detail h3 {
+  font-size: 27px;
+}
+
+
+
+
+.overlay.result-mode {
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+
+
+
+
+
+.overlay.result-mode .popup {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+
+
+
+
+
+
+#resultScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0,0,0,0.7);
+  z-index: 9999;
+}
+
+#resultScreen.hidden {
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+#waveContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+#waveContainer.show {
+  animation: fadeIn 0.3s forwards;
+}
+#waveContainer.hide {
+  animation: fadeOut 0.4s forwards;
+}
+
+#waveBars {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 80px;
+}
+
+
+
+
+.bar {
+  width: 4px;
+  height: 20px;
+  background: black;
+  transition: height 0.2s ease;
+}
+
+
+
+
+
+/* 🌊 wave chung */
+.wave-inline {
+  position: absolute;
+  pointer-events: none;
+
+  opacity: 0;
+
+  animation: waveFade 1s ease forwards;
+}
+
+
+
+
+@keyframes waveFade {
+  0% {
+    opacity: 0;
+
+  }
+  20% {
+    opacity: 1;
+
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+
+  }
+}
+
+
+
+
+
+/* 🎮 gameplay → trên chữ */
+#question .wave-inline {
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 5px;
+}
+
+
+/* 📊 result → bên trái */
+
+
+
+.wrong-word .wave-inline {
+  left: 100%;              /* 🔥 đổi từ right → left */
+  top: 50%;
+  transform: translate(-100%, -50%);
+  margin-left: 8px;        /* 🔥 đổi margin-right → margin-left */
+}
+
+
+
+
+
+
+
+
+/* 🎛 bar nhỏ */
+.waveBars-inline {
+  display: flex;
+  gap: 2px;
+  height: 30px;
+  align-items: center;
+}
+
+
+
+
+
+.bar-inline {
+  width: 3px;
+  height: 40px;   /* 🔥 tăng nền chiều cao */
+
+  background:#333;
+
+  transform-origin: center;
+  border-radius: 0px;
+}
+
+
+
+
+
+
+/* fade */
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+@keyframes fadeOut {
+  from { opacity: 1 }
+  to { opacity: 0 }
+}
+
+
+
+
+
+
+  </style>
+</head>
+
+
+
+
+<body spellcheck="false">
+<button id="settingsBtn" class="hidden" onclick="openSettings()">⚙️</button>
+
+
+<div class="overlay" id="overlay">
+  <div class="popup" id="popup"></div>
+</div>
+
+
+
+
+
+
+<div id="menuBox">
+  <h1>🔥 Duolinkgone 🔥</h1>
+  <button onclick="goToGame()">▶️ Chơi</button>
+  <button onclick="showLeaderboard()">🏆 BXH</button>
+</div>
+
+
+
+
+<div id="gradePopup" class="overlay">
+  <div class="popup">
+  <h3 style="font-size: 25px;">📚 Bạn học lớp mấy?</h3>
+
+  <div class="grade-buttons">
+    <button onclick="selectGrade(10)">Lớp 10</button>
+    <button onclick="selectGrade(11)">Lớp 11</button>
+    <button onclick="selectGrade(12)">Lớp 12</button>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+<div class="box hidden" id="box">
+  <div id="streakBarContainer">
+    <div id="streakBar"></div>
+  </div>
+
+  <div id="gameContent">
+
+    <div id="levelButtons">
+      <button onclick="startGame(1)">Level 1<br>Kiểu tự luận</br></button>
+      <button onclick="startGame(2)">Level 2<br>Kiểu trắc nghiệm</br></button>
+      <button onclick="startGame(3)">Level 3<br>Kiểu nối từ</br></button>
+    </div>
+
+    <h2 id="question" onclick="repeatSpeak()"></h2>
+
+    <input id="answer" class="hidden">
+    <button id="submitBtn" onclick="submitAnswer()" class="hidden">Trả lời</button>
+
+    <div id="choices" class="hidden"></div>
+
+  </div>
+
+</div>
+
+
+
+
+
+<div id="resultScreen" class="hidden">
+    <div class="result-wrapper">
+
+      <div class="result-main">
+        <h2>KẾT QUẢ</h2>
+        <p id="rs-dung"></p>
+        <p id="rs-sai"></p>
+        <p id="rs-streak"></p>
+        <p id="rs-time"></p>
+
+        <button onclick="restartGame()">🔄 Chơi lại</button>
+        <button onclick="goBack()">🏠 Menu</button>
+     </div>
+    <div class="result-detail" id="rs-detail"></div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div>
+  <p id="result"></p>
+  <p id="score"></p>
+  <p id="finalResult"></p>
+</div>
+
+
+
+
+
+
+
+<div class="overlay" id="settingsOverlay">
+  <div id="settingsPopup" class="popup">
+    <h3 style="font-size: 25px;">⚙️ Tùy chọn</h3>
+    <button onclick="closeSettings()">▶️ Tiếp tục</button>
+    <button class="exit" onclick="exitGame()">❌ Thoát game</button>
+  </div>
+</div>
+
+
+
+<div id="waveContainer">
+  <div id="waveBars"></div>
+</div>
+
+
+<script src="englishVocabularys.js"></script>
+<script src="englishCode.js"></script>
+
+
+<audio id="sound-correct" src="correct.mp3" preload="auto"></audio>
+<audio id="sound-wrong" src="wrong.mp3" preload="auto"></audio>
+<audio id="sound-finish" src="finish.mp3" preload="auto"></audio>
+
+</body>
+  </html>llow, green, cyan, blue, violet
   );
   background-size: 300% 100%;
   animation: rainbowMove 2s linear infinite;
