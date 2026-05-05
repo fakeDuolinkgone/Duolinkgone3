@@ -22,6 +22,7 @@ let startTime = 0;
 
 let eng = [], vn = [];
 let dataLoaded = false;
+let history = [];
 
 //fetch
 if (typeof vocabData !== 'undefined') {
@@ -38,14 +39,22 @@ if (typeof vocabData !== 'undefined') {
 
 
 
+let voices = [];
+speechSynthesis.onvoiceschanged = () => {
+  voices = speechSynthesis.getVoices();
+};
+
+
+
 
 
 
   // Khai báo các phần tử DOM thường dùng
 let input, box, overlay, popup;
-
-
 document.addEventListener("DOMContentLoaded", () => {
+  createWaveBars();
+
+
   input = document.getElementById("answer");
   box = document.getElementById("box");
   overlay = document.getElementById("overlay");
@@ -67,12 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-overlay.addEventListener("click", (e) => {
-  if (e.target === overlay) {
-    overlay.classList.remove("show");
-  }
-});
-
 
 
 
@@ -83,8 +86,17 @@ overlay.addEventListener("click", (e) => {
       if (e.target === gradePopup) {
         gradePopup.classList.remove("show");
       }
-    });
-  }
+    });}
+
+
+    document.getElementById("question").addEventListener("click", () => {
+  let word = document.getElementById("question").innerText;
+  speak(word);
+});
+
+
+
+
 });
 
 
@@ -126,7 +138,7 @@ function selectGrade(grade) {
       .filter(v => v.grade === grade && v.unit === u)
       .sort(() => Math.random() - 0.5);
 
-    filteredVocab.push(...unitWords.slice(0, 5));
+    filteredVocab.push(...unitWords.slice(0, 3));
   }
 
   // 🔥 ĐẶT Ở ĐÂY
@@ -182,6 +194,7 @@ function showLeaderboard() {
 function startGame(level) {
   document.getElementById("settingsBtn").classList.remove("hidden");
 
+  history = [];
   streak = 0;
   maxStreak = 0;
   updateStreakUI();
@@ -318,8 +331,18 @@ function checkChoice(selected) {
     }
   });
 
+
+  let isCorrect = correctList.includes(selected);
+history.push({
+  word: playingEng[currentIndex],
+  correct: correctList,
+  user: selected,
+  isCorrect: isCorrect
+});
+
+
   // ✅ đúng nếu nằm trong list nghĩa
-  if (correctList.includes(selected)) {
+  if (isCorrect) {
     dung++;
     streak++;
     if (streak > maxStreak) maxStreak = streak;
@@ -335,6 +358,7 @@ function checkChoice(selected) {
 
     streak = 0;
   }
+
 
   updateStreakUI();
 
@@ -363,6 +387,20 @@ function loadQuestion() {
     showResult();
     return;
   }
+document.getElementById("question").onclick = function () {
+  speak(this.innerText, this);
+};
+
+
+
+
+
+let currentWord = "";
+function showQuestion(word) {
+  currentWord = word;
+  document.getElementById("questionText").innerText = word;
+}
+
 
   let q = document.getElementById("question");
   let choices = document.getElementById("choices");
@@ -381,7 +419,11 @@ function loadQuestion() {
 
   setTimeout(() => {
     // đổi nội dung
-    q.innerText = playingEng[currentIndex];
+    let currentWord = playingEng[currentIndex];
+q.innerText = currentWord;
+
+// 🔊 đọc từ
+speak(currentWord);
 
     // reset animation
     q.classList.remove("slide-out");
@@ -571,6 +613,18 @@ function tryMatch() {
 
   let pair = matchPairs.find(p => p.eng === selectedEng);
 
+
+let isCorrect = pair && pair.vn === selectedVn;
+
+history.push({
+  word: selectedEng,
+  correct: [pair ? pair.vn : selectedVn],
+  user: selectedVn,
+  isCorrect: isCorrect
+});
+
+
+
   if (pair && pair.vn === selectedVn) {
     dung++;
     streak++;
@@ -595,6 +649,8 @@ vnEl.style.pointerEvents = "none";
     playingVn.splice(index, 1);
 
     remainingPairs--;
+
+
   } else {
     streak = 0;
     playWrong();
@@ -641,7 +697,18 @@ function submitAnswer() {
 
   let list = playingVn[currentIndex];
 
-  if (list.some(n => ans === n || ans.includes(n))) {
+
+let isCorrect = list.some(n => ans === n || ans.includes(n));
+
+history.push({
+  word: playingEng[currentIndex],
+  correct: playingVn[currentIndex],
+  user: ans,
+  isCorrect: isCorrect
+});
+
+
+  if (isCorrect) {
     dung++;
     streak++;
     if (streak > maxStreak) maxStreak = streak;
@@ -667,10 +734,14 @@ function submitAnswer() {
 
   updateStreakUI();
 
+
+
   playingEng.splice(currentIndex, 1);
   playingVn.splice(currentIndex, 1);
   so_cau--;
   input.value = "";
+
+
 
   loadQuestion();
 }
@@ -692,32 +763,22 @@ function showResult() {
   let time = Math.floor((Date.now() - startTime) / 1000);
   saveScore(dung, time);
 
-  overlay.classList.add("show", "result-mode");
-popup.innerHTML = `
-  <div class="popup-result">
-    <div class="result-wrapper">
+  // ❌ tắt game UI
+  document.getElementById("box").classList.add("hidden");
 
-      <div class="result-main">
-        <h2>KẾT QUẢ</h2>
-        <p>Đúng: ${dung}</p>
-        <p>Sai: ${sai.length}</p>
-        <p>Streak cao nhất: ${maxStreak}🔥</p>
-        <p>Thời gian: ${time}s</p>
+  // ✅ hiện result screen
+  let rs = document.getElementById("resultScreen");
+  rs.classList.remove("hidden");
 
-        <button onclick="restartGame()">🔄 Chơi lại</button>
-        <button onclick="goBack()">🏠 Menu</button>
-      </div>
+  // 🎯 set dữ liệu
+  document.getElementById("rs-dung").innerText = "Đúng: " + dung;
+  document.getElementById("rs-sai").innerText = "Sai: " + sai.length;
+  document.getElementById("rs-streak").innerText = "Streak cao nhất: " + maxStreak + "🔥";
+  document.getElementById("rs-time").innerText = "Thời gian: " + time + "s";
 
-      <div class="result-detail">
-        ${renderWrongList()}
-      </div>
-
-    </div>
-  </div>
-`;
+  document.getElementById("rs-detail").innerHTML = renderHistory();
 
   playFinish();
-  overlay.classList.add("show");
 }
 
 
@@ -725,24 +786,30 @@ popup.innerHTML = `
 
 
 
-function renderWrongList() {
-  if (sai.length === 0) {
-    return `<p style="text-align:center;">🎉 Không sai câu nào!</p>`;
-  }
+function renderHistory() {
+  let html = `<h3 style="text-align:center;">📊 Chi tiết</h3>
+  <div class="wrong-table">`;
 
-  let html = `
-    <h3 style="text-align:center;">❌ Danh sách sai</h3>
-    <div class="wrong-table">
-  `;
+  history.forEach((item, index) => {
+    let colorClass = item.isCorrect ? "correct-row" : "wrong-row";
 
-  sai.forEach(item => {
     html += `
-      <div class="wrong-row">
-        <div class="wrong-word">${item.word}</div>
-        <div class="wrong-user">❌ ${item.wrong}</div>
-        <div class="wrong-correct">✅ ${item.correct.join(", ")}</div>
-      </div>
-    `;
+  <div class="${colorClass}" onclick="speak('${item.word}', this.querySelector('.wrong-word'))">
+  
+  <div class="wrong-word">
+    🔊 ${item.word}
+  </div>
+
+    <div class="wrong-user">
+      ${item.isCorrect ? "✅ " + item.user : "❌ " + item.user}
+    </div>
+
+    <div class="wrong-correct">
+      → ${item.correct.join(", ")}
+    </div>
+
+  </div>
+`;
   });
 
   html += `</div>`;
@@ -754,17 +821,17 @@ function renderWrongList() {
 
 
 
-
 function restartGame() {
-  overlay.classList.remove("show");
+  document.getElementById("resultScreen").classList.add("hidden");
 
-  // reset UI
-let choices = document.getElementById("choices");
-choices.innerHTML = "";
-choices.classList.add("hidden");
+  document.getElementById("box").classList.remove("hidden"); // 🔥 THÊM
+
+  let choices = document.getElementById("choices");
+  choices.innerHTML = "";
+  choices.classList.add("hidden");
+
   input.value = "";
 
-  // 🔁 chạy lại đúng level cũ
   startGame(currentLevel);
 }
 
@@ -800,7 +867,7 @@ function updateStreakUI() {
   let bar = document.getElementById("streakBar");
   let container = document.getElementById("streakBarContainer");
 
-  let total = 50       // tổng câu (50)
+  let total = filteredVocab.length;       // tổng câu == độ dài ds
   let done = dung + sai.length;    // đã làm
 
   let percent = (done / total) * 100;
@@ -879,13 +946,50 @@ function closePopup() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
 // audio - s
 
+function speak(word, el = null) {
+  speechSynthesis.cancel();
+
+  // 📍 nếu không truyền element → dùng question
+  if (!el) el = document.getElementById("question");
+
+  const bars = attachWaveTo(el);
+
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-US";
+  utterance.rate = 0.85;
+
+  const duration = Math.max(800, word.length * 120);
+  let startTime = Date.now(); 
+
+  utterance.onend = () => {
+    setTimeout(removeWave, 200);
+  };
+
+  speechSynthesis.speak(utterance);
+}
 
 
 
 
 
+
+
+function repeatSpeak() {
+  let word = document.getElementById("question").innerText;
+  speak(word);
+}
 
 
 
@@ -893,15 +997,12 @@ function closePopup() {
 
 
 let soundCorrect, soundWrong, soundClick, soundFinish;
-
 document.addEventListener("DOMContentLoaded", () => {
   soundCorrect = document.getElementById("sound-correct");
   soundWrong = document.getElementById("sound-wrong");
   soundFinish = document.getElementById("sound-finish");
 });
-
 let soundEnabled = true; // có thể tắt bật sau
-
 function playSound(sound) {
   if (!sound.src) return;
   sound.currentTime = 0;
@@ -919,7 +1020,109 @@ function playWrong() {
 function playFinish() {
   playSound(soundFinish);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function createWaveBars() {
+  const container = document.getElementById("waveBars");
+  container.innerHTML = "";
+
+  for (let i = 0; i < 40; i++) {
+    let bar = document.createElement("div");
+    bar.className = "bar";
+    container.appendChild(bar);
+  }
+}
+
+
+
+
+function removeWave() {
+  document.querySelectorAll(".wave-inline").forEach(w => w.remove());
+}
+
+
+
+
+
+function attachWaveTo(el) {
+  // xoá wave cũ nếu có
+  removeWave();
+  const wave = document.createElement("div");
+  wave.className = "wave-inline";
+  const bars = document.createElement("div");
+  bars.className = "waveBars-inline";
+
+
+  
+
+
+
+  // tạo bar nhỏ hơn
+let total = 61; // nhiều thanh hơn cho mịn
+
+for (let i = 0; i < 41; i++) {
+  let bar = document.createElement("div");
+  bar.className = "bar-inline";
+
+  let x = i / 40;
+
+  // 🟣 1. ENVELOPE (giảm độ cao trung tâm + kéo rộng)
+  let dist = Math.abs(x - 0.5);
+
+  let envelope = 1 - dist * 2.1;   // 🔥 từ 2 → 1.6 (kéo sóng ra)
+  envelope = Math.max(0, envelope);
+
+  envelope = Math.pow(envelope, 1.3); // 🔥 từ 1.8 → 1.2 (đỡ nhọn, đỡ cao)
+
+  // 🔺 2. TRIANGLE (giữ nguyên)
+  let peaks = 5;
+  let t = x * peaks;
+  let triangle = 1 - Math.abs((t % 1) * 2 - 1);
+
+  // 🟢 3. SCALE (thu nhỏ tổng thể)
+  let scale = envelope * (0.25 + triangle * 0.9); // 🔥 giảm lực
+
+  scale = 0.05 + scale * 0.9; // 🔥 từ 2.2 → 1.5 (nhỏ lại toàn bộ)
+
+  bar.style.transform = `scaleY(${scale})`;
+
+  bars.appendChild(bar);
+}
+
+
+
+
+
+
+
+  wave.appendChild(bars);
+
+  // 📍 gắn vào vị trí phù hợp
+  el.style.position = "relative";
+  el.appendChild(wave);
+
+  return bars.querySelectorAll(".bar-inline");
+}
+
+
+
+
+
 //audio -e
+
+
 
 
 
@@ -963,6 +1166,7 @@ function closeSettings() {
 
 
 function goBack() {
+  document.getElementById("resultScreen").classList.add("hidden");
   playingEng = [];
   playingVn = [];
   dung = 0;
@@ -983,11 +1187,12 @@ function goBack() {
 
   // ❗ sửa lại
   document.getElementById("settingsBtn").classList.add("hidden");
-  closePopup()
+  document.getElementById("menuBox").style.display = "flex";
+  document.getElementById("box").classList.add("hidden");
 
 }
 
-
+overlay
 
 
 

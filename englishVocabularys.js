@@ -1,7 +1,7 @@
 // File: englishVocabulary.js
 const vocabData = [
   // --- Unit 1: Family Life ---
-  { "word": "benefit", "meaning": ["lợi ích", "phúc lợi", "ưu điểm"], "unit": 1, "grade": 10 },
+  { "word": "benefit", "classword" : "n", "meaning": ["lợi ích", "phúc lợi", "ưu điểm"], "unit": 1, "grade": 10 },
   { "word": "bond", "meaning": ["sự gắn bó", "kết nối", "mối liên kết"], "unit": 1, "grade": 10 },
   { "word": "breadwinner", "meaning": ["trụ cột gia đình", "người nuôi gia đình", "người kiếm sống"], "unit": 1, "grade": 10 },
   { "word": "character", "meaning": ["tính cách", "nhân vật", "đặc điểm"], "unit": 1, "grade": 10 },
@@ -553,6 +553,16 @@ const vocabData = [
   { word: "tropical forest", meaning: ["rừng nhiệt đới"], unit: 10, grade: 11 },
   { word: "wildlife", meaning: ["động vật hoang dã"], unit: 10, grade: 11 },
 
+
+
+
+
+
+
+
+
+
+  
 
     //Grade12
   // UNIT 1
